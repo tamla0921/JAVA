@@ -19,4 +19,5 @@ public interface WordBookDao {
     Date findDay(Integer no);
     
     Integer nextNo(Integer value);
+    // 
 }
