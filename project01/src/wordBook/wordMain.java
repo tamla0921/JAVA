@@ -31,6 +31,11 @@ public class wordMain implements UpdateListener, NewListener {
     private JTable table;
     private JTextField textSearch;
     private JComboBox sadari;
+    private JButton btnNew;
+    private JButton btnDetail;
+    private JButton btnDelete;
+    private JButton btnSearch;
+    private JButton btnTest;
 
     /**
      * Launch the application.
@@ -70,15 +75,15 @@ public class wordMain implements UpdateListener, NewListener {
         JPanel panel = new JPanel();
         frame.getContentPane().add(panel, BorderLayout.NORTH);
 
-        JButton btnNewButton = new JButton("자세히 보기");
-        btnNewButton.addActionListener(new ActionListener() {
+        btnDetail = new JButton("자세히 보기");
+        btnDetail.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 showDetail();
             }
         });
 
-        JButton btnNew = new JButton("한자 추가");
+        btnNew = new JButton("한자 추가");
         btnNew.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -86,9 +91,9 @@ public class wordMain implements UpdateListener, NewListener {
             }
         });
         panel.add(btnNew);
-        panel.add(btnNewButton);
+        panel.add(btnDetail);
 
-        JButton btnDelete = new JButton("ㅠㅠ");
+        btnDelete = new JButton("ㅠㅠ");
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -108,7 +113,7 @@ public class wordMain implements UpdateListener, NewListener {
         panel.add(textSearch);
         textSearch.setColumns(10);
 
-        JButton btnSearch = new JButton("검색");
+        btnSearch = new JButton("검색");
         btnSearch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -116,6 +121,15 @@ public class wordMain implements UpdateListener, NewListener {
             }
         });
         panel.add(btnSearch);
+        
+        btnTest = new JButton("TEST!!");
+        btnTest.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                clearTable();
+                
+            }
+        });
+        panel.add(btnTest);
 
         JScrollPane scrollPane = new JScrollPane();
         frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
@@ -125,6 +139,26 @@ public class wordMain implements UpdateListener, NewListener {
     }
 
     
+
+    protected void clearTable() {
+        model = new DefaultTableModel();
+        table.setModel(model);
+//        hidebuttons();
+        WordBookTestFrame.testFrame();
+        
+        
+}
+
+    private void hidebuttons() {
+        btnNew.setVisible(false);
+        btnDelete.setVisible(false);
+        btnDetail.setVisible(false);
+        btnSearch.setVisible(false);
+        btnTest.setVisible(false);
+        sadari.setVisible(false);
+        textSearch.setVisible(false);
+        
+    }
 
     // 테이블 새로고침
     private void initializeTable() {
@@ -191,7 +225,7 @@ public class wordMain implements UpdateListener, NewListener {
     // 단어 추가
     protected void showNew() {
         WordBookNewFrame.showNew(frame, wordMain.this);
-
+    
     }
 
     // 단어 자세히 보기

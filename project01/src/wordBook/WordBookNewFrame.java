@@ -1,7 +1,5 @@
 package wordBook;
 
-import static wordBook.WordBook.Entity.COL_DAY;
-
 import java.awt.Component;
 import java.awt.EventQueue;
 

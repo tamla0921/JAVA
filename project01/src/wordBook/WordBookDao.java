@@ -16,8 +16,9 @@ public interface WordBookDao {
     WordBook next(Integer no);
     WordBook previous(Integer no);
     Integer birthday(Integer no);
-    Date findDay(Integer no);
+    Date days(Integer no);
     
     Integer nextNo(Integer value);
-    // 
+    Integer previousNo(Integer value);
+    Integer get10words();
 }

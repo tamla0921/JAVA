@@ -39,6 +39,7 @@ public class WordBookDetailFrame extends JFrame {
     private Integer value;
     private Component parent;
     private JTextField textPronun;
+    private JButton btnDay;
 
     /**
      * Launch the application.
@@ -134,6 +135,7 @@ public class WordBookDetailFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 shownext();
+                
             }
         });
         btnNext.setBounds(193, 88, 51, 59);
@@ -149,20 +151,21 @@ public class WordBookDetailFrame extends JFrame {
         btnPrevious.setBounds(-1, 88, 51, 59);
         contentPane.add(btnPrevious);
 
-        JButton btnDay = new JButton();
+        btnDay = new JButton();
 
-        if (dao.findDay(value) == null) {
+        if (dao.days(value) == null) {
             btnDay.setText("날짜 생성");
         } else {
-            btnDay.setText(dao.findDay(value).toString());
+            btnDay.setText(dao.days(value).toString());
         }
         btnDay.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 birthday();
+                btnDay.setText(dao.days(value).toString());
             }
         });
-        btnDay.setBounds(15, 17, 97, 23);
+        btnDay.setBounds(-1, 17, 113, 23);
         contentPane.add(btnDay);
     }
 
@@ -171,7 +174,6 @@ public class WordBookDetailFrame extends JFrame {
         WordBook wrd = dao.read(value);
         Integer n = wrd.getNo();
         dao.birthday(n);
-
     }
 
     // ---------- 자세히 보는 창 ---------- //
@@ -188,42 +190,53 @@ public class WordBookDetailFrame extends JFrame {
 
 // ---------- 이전 항목 보기 버튼 ---------- //
     protected void showPrevious() {
-        
-        WordBook wrd = dao.previous(value);
+        int value2 = value;
+        value = dao.previousNo(value);
+        WordBook wrd = dao.read(value);
 
         try {
-            
+
             textGrade.setText(wrd.getGrade().toString());
             textWord.setText(wrd.getWord());
             textMeaning.setText(wrd.getMeaning());
             textPronun.setText(wrd.getPronunciation());
             textRadical.setText(wrd.getRadical());
-            value -= 1;
+            if (dao.days(value) == null) {
+                btnDay.setText("날짜 생성");
+            } else {
+                btnDay.setText(dao.days(value).toString());
+            }
 
         } catch (NullPointerException e) {
-            JOptionPane.showMessageDialog(this, "첫 번째 페이지입니다.");
+            JOptionPane.showMessageDialog(this, "첫 페이지입니다...");
+            value = value2;
 
-            return;
         }
+
     }
 
 // ---------- 다음 항목 보기 버튼 ---------- //
     protected void shownext() {
+        int value2 = value;
         value = dao.nextNo(value);
         WordBook wrd = dao.read(value);
-        
+
         try {
-            
+
             textGrade.setText(wrd.getGrade().toString());
             textWord.setText(wrd.getWord());
             textMeaning.setText(wrd.getMeaning());
             textPronun.setText(wrd.getPronunciation());
             textRadical.setText(wrd.getRadical());
-            
-            
-        } catch (NullPointerException e) {
-           JOptionPane.showMessageDialog(this, "마지막 페이지입니다...");
+            if (dao.days(value) == null) {
+                btnDay.setText("날짜 생성");
+            } else {
+                btnDay.setText(dao.days(value).toString());
+            }
 
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(this, "마지막 페이지입니다...");
+            value = value2;
         }
 
     }

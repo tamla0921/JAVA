@@ -301,7 +301,7 @@ public class WordBookDaoImpl implements WordBookDao {
         try {
             DriverManager.registerDriver(new OracleDriver());
             conn = DriverManager.getConnection(URL,USER,PASSWORD);
-            stmt = conn.prepareStatement(SQL_NEXT_GROUP);
+            stmt = conn.prepareStatement(SQL_PREVIOUS_NO);
             stmt.setInt(1, no);
             rs = stmt.executeQuery();
             
@@ -454,7 +454,7 @@ public class WordBookDaoImpl implements WordBookDao {
     }
 
     @Override
-    public Date findDay(Integer no) {
+    public Date days(Integer no) {
         
         Date day = null;
         Connection conn = null;
@@ -502,7 +502,7 @@ public class WordBookDaoImpl implements WordBookDao {
         try {
             DriverManager.registerDriver(new OracleDriver());
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
-            stmt = conn.prepareStatement(SQL_NEXT_GROUP);
+            stmt = conn.prepareStatement(SQL_NEXT_NO);
             stmt.setInt(1, value);
             rs = stmt.executeQuery();
             
@@ -528,6 +528,62 @@ public class WordBookDaoImpl implements WordBookDao {
         
         
         return result;
+    }
+    
+    @Override
+    public Integer previousNo(Integer value) {
+        int result = 0;
+        
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            DriverManager.registerDriver(new OracleDriver());
+            conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            stmt = conn.prepareStatement(SQL_PREVIOUS_NO);
+            stmt.setInt(1, value);
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                result = rs.getInt(COL_NO);
+            } 
+            
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            try {
+                rs.close();
+                stmt.close();
+                conn.close();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            
+        }
+        
+        
+        return result;
+    }
+    @Override
+    public Integer get10words() {
+        int result = 0;
+        
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            DriverManager.registerDriver(new OracleDriver());
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return result;
+        
     }
 
 } //DAOIMPL 닫음
