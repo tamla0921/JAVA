@@ -44,5 +44,7 @@ public interface WordBookSql {
     String SQL_READ_DATE = String.format("select %s from %s where %s = ?", COL_DAY, TBL_WORDBOOK, COL_NO);
 
     String SQL_WORDBOOK_NO = String.format("select %s from %s", COL_NO, TBL_WORDBOOK);
+    
+    String SQL_GET_10WORDS = String.format("select * from (select * from %s where to_char(%s, 'YYYY/MM/DD') >= ? and to_char(%s, 'YYYY/MM/DD') <= ? order by dbms_random.value ) where rownum <= 10", TBL_WORDBOOK, COL_DAY, COL_DAY);
 
 }

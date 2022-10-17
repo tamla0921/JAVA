@@ -446,6 +446,15 @@ public class WordBookDaoImpl implements WordBookDao {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } finally {
+            try {
+                stmt.close();
+                conn.close();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            
         }
         
         
@@ -568,8 +577,8 @@ public class WordBookDaoImpl implements WordBookDao {
         return result;
     }
     @Override
-    public Integer get10words() {
-        int result = 0;
+    public List<WordBook> get10words(String from, String to) {
+        List<WordBook> list = new ArrayList<> ();
         
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -577,12 +586,43 @@ public class WordBookDaoImpl implements WordBookDao {
         
         try {
             DriverManager.registerDriver(new OracleDriver());
+            conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            stmt = conn.prepareStatement(SQL_GET_10WORDS);
+            stmt.setString(1, from);
+            stmt.setString(2, to);
+            
+            rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                Integer n = rs.getInt(COL_NO);
+                String w = rs.getString(COL_WORD);
+                String r = rs.getString(COL_RADICAL);
+                String m = rs.getString(COL_MEANING);
+                String p = rs.getString(COL_PRONUNCIATION);
+                Integer g = rs.getInt(COL_GRADE);
+                Date d =rs.getDate(COL_DAY);
+                
+
+                WordBook wordBook = new WordBook(n, w, r, m, p, g, d);
+
+                list.add(wordBook);
+            }
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } finally {
+            try {
+                rs.close();
+                stmt.close();
+                conn.close();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            
         }
         
-        return result;
+        return list;
         
     }
 
