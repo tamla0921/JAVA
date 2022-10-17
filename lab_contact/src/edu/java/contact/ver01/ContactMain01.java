@@ -5,7 +5,7 @@ import java.util.Scanner;
 import edu.java.contact.menu.MainMenu;
 
 public class ContactMain01 {
-    // 상수
+    // 상수// 입니다.
     private static final int MAX_LENGTH = 3; // 저장할 수 있는 연락처의 최대 갯수.
     
     // field
