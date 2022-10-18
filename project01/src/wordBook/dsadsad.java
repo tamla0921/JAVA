@@ -1,16 +1,26 @@
 package wordBook;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JOptionPane;
+
 public class dsadsad {
 
     public static void main(String[] args) {
-        int a = 3;
-        System.out.println(a);
+    
+        List<String> answerList = new ArrayList<>();
         
-        int b = a;
-        
-        a = 5;
-        System.out.println("a의값: " + a);
-        System.out.println("b의값은: " +  b);
-    }
+        String answer = "하이";
 
+        answerList.add(answer);
+        System.out.println(answerList);
+    }
 }
+
+    
+    
+   
+    
+
+    

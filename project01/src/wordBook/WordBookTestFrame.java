@@ -5,6 +5,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import wordBook.Paper.PaperListener;
+
 import javax.swing.JTextField;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
@@ -12,12 +15,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.Date;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class WordBookTestFrame extends JFrame {
 
     private WordBookDaoImpl dao;
-
+    
     private JPanel contentPane;
     private JTextField textFromYear;
     private JTextField textFromMonth;
@@ -25,15 +29,17 @@ public class WordBookTestFrame extends JFrame {
     private JTextField textToYear;
     private JTextField textToMonth;
     private JTextField textToDay;
+    
+    private PaperListener l;
 
     /**
      * Launch the application.
      */
-    public static void testFrame() {
+    public static void testFrame(PaperListener l) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
 
-                WordBookTestFrame frame = new WordBookTestFrame();
+                WordBookTestFrame frame = new WordBookTestFrame(l);
                 frame.setVisible(true);
 
             }
@@ -43,8 +49,9 @@ public class WordBookTestFrame extends JFrame {
     /**
      * Create the frame.
      */
-    public WordBookTestFrame() {
-
+    public WordBookTestFrame(PaperListener l) {
+        this.l = l;
+        
         initialize();
 
     }
@@ -153,7 +160,9 @@ public class WordBookTestFrame extends JFrame {
         String from = String.format(fromYear + "/" + fromMonth + "/" + fromDay);
         String to = String.format(toYear + "/" + toMonth + "/" + toDay);
 
-        Paper.paper(from, to);
+        Paper.paper(from, to, l);
+        
+        dispose();
 
         System.out.println("dd: " + from);
         System.out.println("ee: " + to);

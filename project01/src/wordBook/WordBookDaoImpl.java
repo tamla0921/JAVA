@@ -49,6 +49,7 @@ public class WordBookDaoImpl implements WordBookDao {
             rs = stmt.executeQuery();
 
             while (rs.next()) {
+                
                 Integer n = rs.getInt(COL_NO);
                 String w = rs.getString(COL_WORD);
                 String r = rs.getString(COL_RADICAL);

@@ -16,13 +16,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import wordBook.Paper.PaperListener;
 import wordBook.WordBookDetailFrame.UpdateListener;
 import wordBook.WordBookNewFrame.NewListener;
+
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 
-public class wordMain implements UpdateListener, NewListener {
+public class wordMain implements UpdateListener, NewListener, PaperListener {
     private static final String[] COLUMN_NAMES = { "no", "단어", "뜻", "급수", "배운 날짜" };
+    private static final String[] COLUMN_NAMES2 = { "no", "한자", "뜻", "O/X" };
     private DefaultTableModel model;
 
     private WordBookDaoImpl dao;
@@ -36,6 +39,10 @@ public class wordMain implements UpdateListener, NewListener {
     private JButton btnDelete;
     private JButton btnSearch;
     private JButton btnTest;
+
+    private List<WordBook> randomList;
+    private List<String> ckList;
+    private List<String> answerList;
 
     /**
      * Launch the application.
@@ -121,12 +128,12 @@ public class wordMain implements UpdateListener, NewListener {
             }
         });
         panel.add(btnSearch);
-        
+
         btnTest = new JButton("TEST!!");
         btnTest.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 clearTable();
-                
+
             }
         });
         panel.add(btnTest);
@@ -138,16 +145,13 @@ public class wordMain implements UpdateListener, NewListener {
         scrollPane.setViewportView(table);
     }
 
-    
-
     protected void clearTable() {
         model = new DefaultTableModel();
         table.setModel(model);
 //        hidebuttons();
-        WordBookTestFrame.testFrame();
-        
-        
-}
+        WordBookTestFrame.testFrame(this);
+
+    }
 
     private void hidebuttons() {
         btnNew.setVisible(false);
@@ -157,7 +161,7 @@ public class wordMain implements UpdateListener, NewListener {
         btnTest.setVisible(false);
         sadari.setVisible(false);
         textSearch.setVisible(false);
-        
+
     }
 
     // 테이블 새로고침
@@ -168,12 +172,13 @@ public class wordMain implements UpdateListener, NewListener {
         List<WordBook> list = dao.read();
 
         for (WordBook w : list) {
-            Object[] rowData = { w.getNo(), w.getWord(), w.getMeaning() + " " + w.getPronunciation(), w.getGrade(), w.getDay() };
+            Object[] rowData = { w.getNo(), w.getWord(), w.getMeaning() + " " + w.getPronunciation(), w.getGrade(),
+                    w.getDay() };
             model.addRow(rowData);
         }
     }
 // 데이터 변경 메서드 모음
-    
+
     // TODO 단어 검색
     protected void searchWordByKeyword() {
         String keyword = textSearch.getText();
@@ -191,24 +196,22 @@ public class wordMain implements UpdateListener, NewListener {
 
         model = new DefaultTableModel(null, COLUMN_NAMES);
         table.setModel(model);
-        
-    
+
         for (WordBook w : list) {
-            Object[] row = {w.getNo(), w.getWord(), w.getMeaning(), w.getGrade()};
+            Object[] row = { w.getNo(), w.getWord(), w.getMeaning(), w.getGrade() };
             model.addRow(row);
         }
     }
-    
-    
+
     // 단어 삭제
     protected void delete() {
         int row = table.getSelectedRow();
-        
+
         if (row == -1) {
             JOptionPane.showMessageDialog(frame, "한자를 클릭해주세요!!");
             return;
         }
-        
+
         Integer value = (Integer) model.getValueAt(row, 0);
 
         int result = dao.delete(value);
@@ -225,18 +228,18 @@ public class wordMain implements UpdateListener, NewListener {
     // 단어 추가
     protected void showNew() {
         WordBookNewFrame.showNew(frame, wordMain.this);
-    
+
     }
 
     // 단어 자세히 보기
     private void showDetail() {
         int row = table.getSelectedRow();
-        
+
         if (row == -1) {
             JOptionPane.showMessageDialog(frame, "한자를 클릭해주세요!!");
             return;
         }
-        
+
         Integer value = (Integer) model.getValueAt(row, 0);
         WordBookDetailFrame.showDetail(frame, value, wordMain.this);
 
@@ -253,6 +256,53 @@ public class wordMain implements UpdateListener, NewListener {
     @Override
     public void newNorify() {
         initializeTable();
+
+    }
+
+    // 테스트 후 결과 확인
+    public void resultTable(List<WordBook> randomList, List<String> ckList) { // paper에서... 값을 가져옵니다..
+        model = new DefaultTableModel(null, COLUMN_NAMES2);
+
+        for (int i = 0; i < answerList.size(); i++) {
+            if (answerList.get(i).replace(" ", "")
+                    .equals((randomList.get(i).getMeaning() + randomList.get(i).getPronunciation()))) {
+                System.out.println("정답입니다!");
+                ckList.add("O");
+            } else {
+                ckList.add("X");
+            }
+        }
+
+    }
+
+    @Override
+    public void paperNotify(List<String> answerList, List<WordBook> randomList, List<String> ckList) {
+        this.answerList = answerList;
+        this.randomList = randomList;
+        this.ckList = ckList;
+
+        model = new DefaultTableModel(null, COLUMN_NAMES2);
+
+        for (int i = 0; i < randomList.size(); i++) {
+            if (answerList.get(i).replace(" ", "")
+                    .equals((randomList.get(i).getMeaning() + randomList.get(i).getPronunciation()))) {
+                System.out.println("정답입니다!");
+                ckList.add("O");
+            } else {
+                ckList.add("X");
+            }
+            
+        }
+        
+        for (int i = 0; i < randomList.size(); i++) {
+            Object[] rowdata = { randomList.get(i).getNo(), randomList.get(i).getWord(),
+                    randomList.get(i).getMeaning() + " " + randomList.get(i).getPronunciation(), ckList.get(i) };
+            model.addRow(rowdata);
+
+        }
+        
+        
+        table.setModel(model);
 
     }
 
