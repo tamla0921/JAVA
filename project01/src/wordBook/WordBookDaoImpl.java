@@ -49,15 +49,14 @@ public class WordBookDaoImpl implements WordBookDao {
             rs = stmt.executeQuery();
 
             while (rs.next()) {
-                
+
                 Integer n = rs.getInt(COL_NO);
                 String w = rs.getString(COL_WORD);
                 String r = rs.getString(COL_RADICAL);
                 String m = rs.getString(COL_MEANING);
                 String p = rs.getString(COL_PRONUNCIATION);
                 Integer g = rs.getInt(COL_GRADE);
-                Date d =rs.getDate(COL_DAY);
-                
+                Date d = rs.getDate(COL_DAY);
 
                 WordBook wordBook = new WordBook(n, w, r, m, p, g, d);
 
@@ -298,14 +297,14 @@ public class WordBookDaoImpl implements WordBookDao {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        
+
         try {
             DriverManager.registerDriver(new OracleDriver());
-            conn = DriverManager.getConnection(URL,USER,PASSWORD);
+            conn = DriverManager.getConnection(URL, USER, PASSWORD);
             stmt = conn.prepareStatement(SQL_PREVIOUS_NO);
             stmt.setInt(1, no);
             rs = stmt.executeQuery();
-            
+
             if (rs.next()) {
                 int a = rs.getInt(COL_NO);
                 stmt.close();
@@ -314,22 +313,22 @@ public class WordBookDaoImpl implements WordBookDao {
                 stmt.setInt(1, a);
                 rs = stmt.executeQuery();
                 if (rs.next()) {
-                int n = rs.getInt(COL_NO);
-                String w = rs.getString(COL_WORD);
-                String r = rs.getString(COL_RADICAL);
-                String m = rs.getString(COL_MEANING);
-                String p = rs.getString(COL_PRONUNCIATION);
-                int g = rs.getInt(COL_GRADE);
-                Date d = rs.getDate(COL_DAY);
-              
-                wrd = new WordBook(n,w,r,m,p,g,d);
+                    int n = rs.getInt(COL_NO);
+                    String w = rs.getString(COL_WORD);
+                    String r = rs.getString(COL_RADICAL);
+                    String m = rs.getString(COL_MEANING);
+                    String p = rs.getString(COL_PRONUNCIATION);
+                    int g = rs.getInt(COL_GRADE);
+                    Date d = rs.getDate(COL_DAY);
+
+                    wrd = new WordBook(n, w, r, m, p, g, d);
                 }
             }
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
-            
+
             try {
                 rs.close();
                 stmt.close();
@@ -377,7 +376,7 @@ public class WordBookDaoImpl implements WordBookDao {
 
         return wrd;
     }
-    
+
     public WordBook previous(Integer no) {
         WordBook wrd = null;
 
@@ -401,8 +400,8 @@ public class WordBookDaoImpl implements WordBookDao {
                 String p = rs.getString(COL_PRONUNCIATION);
                 int g = rs.getInt(COL_GRADE);
                 Date d = rs.getDate(COL_DAY);
-                
-                wrd = new WordBook(n,w,r,m,p,g,d);
+
+                wrd = new WordBook(n, w, r, m, p, g, d);
             }
 
         } catch (SQLException e) {
@@ -417,33 +416,34 @@ public class WordBookDaoImpl implements WordBookDao {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            
+
         }
 
         return wrd;
     }
+
 // -------------------------------------------------------------------------------------------------- //
     @Override
     public Integer birthday(Integer no) {
         int result = 0;
-        
+
         Connection conn = null;
         PreparedStatement stmt = null;
-        
+
         try {
             DriverManager.registerDriver(new OracleDriver());
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
             stmt = conn.prepareStatement(SQL_UPDATE_DATE);
-            
+
             Date now = new Date();
-            
-            SimpleDateFormat now2 = new SimpleDateFormat("yyyy-MM-dd");         
-            String now3 = now2.format(now); 
-            
+
+            SimpleDateFormat now2 = new SimpleDateFormat("yyyy-MM-dd");
+            String now3 = now2.format(now);
+
             stmt.setInt(1, no);
-            
+
             result = stmt.executeUpdate();
-            
+
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -455,72 +455,69 @@ public class WordBookDaoImpl implements WordBookDao {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            
+
         }
-        
-        
+
         // TODO Auto-generated method stub
         return result;
     }
 
     @Override
     public Date days(Integer no) {
-        
+
         Date day = null;
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
-        
-            try {
-                DriverManager.registerDriver(new OracleDriver());
-                conn = DriverManager.getConnection(URL, USER, PASSWORD);
-                stmt = conn.prepareStatement(SQL_READ_DATE);
-                
-                stmt.setInt(1, no);
-                
-                rs = stmt.executeQuery();
-                if (rs.next()) {
+        try {
+            DriverManager.registerDriver(new OracleDriver());
+            conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            stmt = conn.prepareStatement(SQL_READ_DATE);
+
+            stmt.setInt(1, no);
+
+            rs = stmt.executeQuery();
+            if (rs.next()) {
                 day = rs.getDate(COL_DAY);
-                }
-                
+            }
+
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+                rs.close();
+                stmt.close();
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
-            } finally {
-                try {
-                    conn.close();
-                    rs.close();
-                    stmt.close();
-                } catch (SQLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
             }
-            
+        }
+
         return day;
     }
 
     @Override
     public Integer nextNo(Integer value) {
         int result = 0;
-        
+
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        
+
         try {
             DriverManager.registerDriver(new OracleDriver());
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
             stmt = conn.prepareStatement(SQL_NEXT_NO);
             stmt.setInt(1, value);
             rs = stmt.executeQuery();
-            
+
             if (rs.next()) {
                 result = rs.getInt(COL_NO);
             }
-            
-            
+
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -533,32 +530,31 @@ public class WordBookDaoImpl implements WordBookDao {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            
+
         }
-        
-        
+
         return result;
     }
-    
+
     @Override
     public Integer previousNo(Integer value) {
         int result = 0;
-        
+
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        
+
         try {
             DriverManager.registerDriver(new OracleDriver());
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
             stmt = conn.prepareStatement(SQL_PREVIOUS_NO);
             stmt.setInt(1, value);
             rs = stmt.executeQuery();
-            
+
             if (rs.next()) {
                 result = rs.getInt(COL_NO);
-            } 
-            
+            }
+
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -571,29 +567,29 @@ public class WordBookDaoImpl implements WordBookDao {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            
+
         }
-        
-        
+
         return result;
     }
+
     @Override
     public List<WordBook> get10words(String from, String to) {
-        List<WordBook> list = new ArrayList<> ();
-        
+        List<WordBook> list = new ArrayList<>();
+
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        
+
         try {
             DriverManager.registerDriver(new OracleDriver());
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
             stmt = conn.prepareStatement(SQL_GET_10WORDS);
             stmt.setString(1, from);
             stmt.setString(2, to);
-            
+
             rs = stmt.executeQuery();
-            
+
             while (rs.next()) {
                 Integer n = rs.getInt(COL_NO);
                 String w = rs.getString(COL_WORD);
@@ -601,8 +597,7 @@ public class WordBookDaoImpl implements WordBookDao {
                 String m = rs.getString(COL_MEANING);
                 String p = rs.getString(COL_PRONUNCIATION);
                 Integer g = rs.getInt(COL_GRADE);
-                Date d =rs.getDate(COL_DAY);
-                
+                Date d = rs.getDate(COL_DAY);
 
                 WordBook wordBook = new WordBook(n, w, r, m, p, g, d);
 
@@ -620,11 +615,54 @@ public class WordBookDaoImpl implements WordBookDao {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            
+
         }
-        
+
         return list;
-        
+
+    }
+
+    @Override
+    public String[] getYear() {
+        List<String> a = new ArrayList<>();
+        String[] list = new String[0];
+
+        int i = 0;
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            DriverManager.registerDriver(new OracleDriver());
+            conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            stmt = conn.prepareStatement(SQL_GET_YEAR);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                if (rs.getString(COL_DAY) != null) {
+                    a.add(rs.getString(COL_DAY));
+                }
+            }
+
+            list = a.toArray(new String[0]);
+
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            try {
+                rs.close();
+                stmt.close();
+                conn.close();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+        return list;
     }
 
 //    @Override
@@ -649,7 +687,7 @@ public class WordBookDaoImpl implements WordBookDao {
 //    
 //        return result;
 //    }
-    
+
 //    public int get10wordsMarked(List<WordBook> List) {
 //        int result = 0;
 //        
@@ -668,4 +706,4 @@ public class WordBookDaoImpl implements WordBookDao {
 //        return result;
 //    }
 
-} //DAOIMPL 닫음
+} // DAOIMPL 닫음

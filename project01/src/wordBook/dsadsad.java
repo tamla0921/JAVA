@@ -29,6 +29,15 @@ public class dsadsad {
         
         System.out.println(before);
         
+        String[] list = new String[100];
+        
+        list[1] = "0";
+        list.toString();
+        
+        
+        
+        System.out.println(list.toString());
+        
     }
 }
 

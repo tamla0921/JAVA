@@ -72,7 +72,7 @@ public class WordBookDetailFrame extends JFrame {
     void initialize() {
         setTitle("한자 자세히 보기");
 
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         int x = parent.getX();
         int y = parent.getY();

@@ -27,7 +27,8 @@ public interface WordBookSql {
     // delete문
     String SQL_DELETE = String.format("delete from %s where %s = ?", TBL_WORDBOOK, COL_NO);
 
-    String SQL_PREVIOUS_NO = String.format("select %s from %s where %s < ? order by %s desc", COL_NO, TBL_WORDBOOK, COL_NO, COL_NO);
+    String SQL_PREVIOUS_NO = String.format("select %s from %s where %s < ? order by %s desc", COL_NO, TBL_WORDBOOK,
+            COL_NO, COL_NO);
 
     String SQL_NEXT_NO = String.format("select %s from %s where %s > ? and rownum <= 1", COL_NO, TBL_WORDBOOK, COL_NO);
 
@@ -44,7 +45,11 @@ public interface WordBookSql {
     String SQL_READ_DATE = String.format("select %s from %s where %s = ?", COL_DAY, TBL_WORDBOOK, COL_NO);
 
     String SQL_WORDBOOK_NO = String.format("select %s from %s", COL_NO, TBL_WORDBOOK);
-    
-    String SQL_GET_10WORDS = String.format("select * from (select * from %s where to_char(%s, 'YYYY/MM/DD') >= ? and to_char(%s, 'YYYY/MM/DD') <= ? order by dbms_random.value ) where rownum <= 10", TBL_WORDBOOK, COL_DAY, COL_DAY);
-    
+
+    String SQL_GET_10WORDS = String.format(
+            "select * from (select * from %s where to_char(%s, 'YYYY/MM/DD') >= ? and to_char(%s, 'YYYY/MM/DD') <= ? order by dbms_random.value ) where rownum <= 10",
+            TBL_WORDBOOK, COL_DAY, COL_DAY);
+
+    String SQL_GET_YEAR = String.format("select to_char(%s, 'YYYY') as %s from %s group by to_char(%s, 'YYYY') order by %s", COL_DAY, COL_DAY,
+            TBL_WORDBOOK, COL_DAY, COL_DAY);
 }

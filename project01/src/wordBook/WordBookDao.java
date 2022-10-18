@@ -22,5 +22,7 @@ public interface WordBookDao {
     Integer previousNo(Integer value);
     List<WordBook> get10words(String from, String to);
     
+    String[] getYear();
+    
 //    Integer marked(String ox);
 }

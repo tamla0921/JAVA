@@ -25,14 +25,14 @@ public class WordBookTestFrame extends JFrame {
     private WordBookDaoImpl dao;
     
     private JPanel contentPane;
-    private JTextField textFromYear;
-    private JTextField textToYear;
     
     private PaperListener l;
     private JComboBox cbFromMonth;
     private JComboBox cbFromDay;
     private JComboBox cbToMonth;
     private JComboBox cbToDay;
+    private JComboBox cbFromYear;
+    private JComboBox cbToYear;
 
     /**
      * Launch the application.
@@ -52,6 +52,7 @@ public class WordBookTestFrame extends JFrame {
      * Create the frame.
      */
     public WordBookTestFrame(PaperListener l) {
+        dao = WordBookDaoImpl.getInstance();
         this.l = l;
         
         initialize();
@@ -59,7 +60,7 @@ public class WordBookTestFrame extends JFrame {
     }
 
     private void initialize() {
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setBounds(100, 100, 450, 300);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -76,16 +77,6 @@ public class WordBookTestFrame extends JFrame {
         JPanel panel_1 = new JPanel();
         contentPane.add(panel_1, BorderLayout.CENTER);
         panel_1.setLayout(null);
-
-        textFromYear = new JTextField();
-        textFromYear.setBounds(12, 22, 86, 21);
-        panel_1.add(textFromYear);
-        textFromYear.setColumns(10);
-
-        textToYear = new JTextField();
-        textToYear.setColumns(10);
-        textToYear.setBounds(12, 136, 86, 21);
-        panel_1.add(textToYear);
 
         JLabel lblNewLabel = new JLabel("년");
         lblNewLabel.setBounds(99, 28, 57, 15);
@@ -143,13 +134,27 @@ public class WordBookTestFrame extends JFrame {
         cbToDay.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
         cbToDay.setBounds(296, 135, 59, 23);
         panel_1.add(cbToDay);
+        
+        
+        //String[] year = {"2222", "3333"};
+        String[] year = dao.getYear();
+        
+        cbFromYear = new JComboBox();
+        cbFromYear.setModel(new DefaultComboBoxModel(year));
+        cbFromYear.setBounds(12, 24, 75, 23);
+        panel_1.add(cbFromYear);
+        
+        cbToYear = new JComboBox();
+        cbToYear.setModel(new DefaultComboBoxModel(year));
+        cbToYear.setBounds(12, 135, 75, 23);
+        panel_1.add(cbToYear);
     }
 
     protected void start() {
-        String fromYear = textFromYear.getText();
+        String fromYear = (String) cbFromYear.getSelectedItem();
         String fromMonth = (String) cbFromMonth.getSelectedItem();
         String fromDay = (String) cbFromDay.getSelectedItem();
-        String toYear = textToYear.getText();
+        String toYear = (String) cbToYear.getSelectedItem();
         String toMonth = (String) cbToMonth.getSelectedItem();
         String toDay = (String) cbToDay.getSelectedItem();
 
