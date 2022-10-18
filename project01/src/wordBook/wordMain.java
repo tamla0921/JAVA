@@ -79,7 +79,7 @@ public class wordMain implements UpdateListener, NewListener, PaperListener {
     private void initialize() {
 
         frame = new JFrame();
-        frame.setBounds(100, 100, 419, 616);
+        frame.setBounds(100, 100, 870, 616);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
