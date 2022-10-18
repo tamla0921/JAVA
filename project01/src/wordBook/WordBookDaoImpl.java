@@ -627,4 +627,45 @@ public class WordBookDaoImpl implements WordBookDao {
         
     }
 
+//    @Override
+//    public Integer marked(String ox) {
+//        int result = 0;
+//        
+//        Connection conn = null;
+//        PreparedStatement stmt = null;
+//        
+//        try {
+//            DriverManager.registerDriver(new OracleDriver());
+//            conn = DriverManager.getConnection(URL,USER,PASSWORD);
+//            
+//            
+//        } catch (SQLException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } finally {
+//            stmt.close();
+//            conn.close();
+//        }
+//    
+//        return result;
+//    }
+    
+//    public int get10wordsMarked(List<WordBook> List) {
+//        int result = 0;
+//        
+//        Connection conn = null;
+//        PreparedStatement stmt = null;
+//        
+//        try {
+//            DriverManager.registerDriver(new OracleDriver());
+//            conn = DriverManager.getConnection(URL, USER, PASSWORD);
+//            stmt = conn.prepareStatement(SQL_10WORDS_MARK);
+//        } catch (SQLException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//        
+//        return result;
+//    }
+
 } //DAOIMPL 닫음

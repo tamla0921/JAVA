@@ -25,6 +25,7 @@ public class WordBook {
     private String pronunciation;
     private Integer grade;
     private Date day;
+//    private String answer;
     
     // 생성자
     public WordBook() {}
@@ -37,9 +38,14 @@ public class WordBook {
         this.pronunciation = pronunciation;
         this.grade = grade;
         this.day = day;
+        //this.answer = answer;
     }
 
     // getter
+//    public String getAnswer() {
+//        return answer;
+//    }
+    
     public Date getDay() {
         return day;
     }

@@ -21,4 +21,6 @@ public interface WordBookDao {
     Integer nextNo(Integer value);
     Integer previousNo(Integer value);
     List<WordBook> get10words(String from, String to);
+    
+//    Integer marked(String ox);
 }

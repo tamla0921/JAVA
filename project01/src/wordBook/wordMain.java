@@ -22,6 +22,7 @@ import wordBook.WordBookNewFrame.NewListener;
 
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import java.awt.CardLayout;
 
 public class wordMain implements UpdateListener, NewListener, PaperListener {
     private static final String[] COLUMN_NAMES = { "no", "단어", "뜻", "급수", "배운 날짜" };
@@ -43,6 +44,8 @@ public class wordMain implements UpdateListener, NewListener, PaperListener {
     private List<WordBook> randomList;
     private List<String> ckList;
     private List<String> answerList;
+    private JPanel card;
+    private JComboBox comboBox;
 
     /**
      * Launch the application.
@@ -100,7 +103,7 @@ public class wordMain implements UpdateListener, NewListener, PaperListener {
         panel.add(btnNew);
         panel.add(btnDetail);
 
-        btnDelete = new JButton("ㅠㅠ");
+        btnDelete = new JButton("삭제하기");
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -110,15 +113,27 @@ public class wordMain implements UpdateListener, NewListener, PaperListener {
         panel.add(btnDelete);
 
         sadari = new JComboBox<>();
+        sadari.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+               
+            }
+        });
         String[] comboBoxItems = { "단어", "음", "훈", "부수", "급수" };
         DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>(comboBoxItems);
         sadari.setModel(comboBoxModel);
         sadari.setSelectedIndex(0);
         panel.add(sadari);
+        
+        card = new JPanel();
+        panel.add(card);
+        card.setLayout(new CardLayout(0, 0));
 
         textSearch = new JTextField();
-        panel.add(textSearch);
+        card.add(textSearch, "name_1655138942184100");
         textSearch.setColumns(10);
+        
+        comboBox = new JComboBox();
+        card.add(comboBox, "name_1655153711218500");
 
         btnSearch = new JButton("검색");
         btnSearch.addActionListener(new ActionListener() {
@@ -145,23 +160,38 @@ public class wordMain implements UpdateListener, NewListener, PaperListener {
         scrollPane.setViewportView(table);
     }
 
+    
+        
+    
+
     protected void clearTable() {
         model = new DefaultTableModel();
         table.setModel(model);
-//        hidebuttons();
+        hidebuttons();
         WordBookTestFrame.testFrame(this);
+        
 
     }
 
     private void hidebuttons() {
-        btnNew.setVisible(false);
-        btnDelete.setVisible(false);
-        btnDetail.setVisible(false);
-        btnSearch.setVisible(false);
-        btnTest.setVisible(false);
-        sadari.setVisible(false);
-        textSearch.setVisible(false);
+        btnNew.setEnabled(false);
+        btnDelete.setEnabled(false);
+        btnDetail.setEnabled(false);
+        btnSearch.setEnabled(false);
+        btnTest.setEnabled(false);
+        sadari.setEnabled(false);
+        textSearch.setEnabled(false);
 
+    }
+    
+    private void reopenButtons() {
+        btnNew.setEnabled(true);
+        btnDelete.setEnabled(true);
+        btnDetail.setEnabled(true);
+        btnSearch.setEnabled(true);
+        btnTest.setEnabled(true);
+        sadari.setEnabled(true);
+        textSearch.setEnabled(true);
     }
 
     // 테이블 새로고침
@@ -190,6 +220,7 @@ public class wordMain implements UpdateListener, NewListener, PaperListener {
         }
 
         int type = sadari.getSelectedIndex();
+        
         System.out.println("type = " + type + ", keyword = " + keyword);
 
         List<WordBook> list = dao.read(type, keyword);
@@ -201,20 +232,28 @@ public class wordMain implements UpdateListener, NewListener, PaperListener {
             Object[] row = { w.getNo(), w.getWord(), w.getMeaning(), w.getGrade() };
             model.addRow(row);
         }
+        
     }
 
     // 단어 삭제
     protected void delete() {
+        int result = 0;
         int row = table.getSelectedRow();
 
         if (row == -1) {
             JOptionPane.showMessageDialog(frame, "한자를 클릭해주세요!!");
             return;
         }
-
+        
         Integer value = (Integer) model.getValueAt(row, 0);
-
-        int result = dao.delete(value);
+        int choice = JOptionPane.showConfirmDialog(frame, "진짜 삭제할까요?", "경고!!", JOptionPane.YES_NO_OPTION);
+        
+        if (choice == JOptionPane.YES_OPTION) {
+        
+        result = dao.delete(value);
+        } else {
+            return;
+        }
 
         if (result == 1) {
             JOptionPane.showMessageDialog(frame, "삭제완료");
@@ -259,28 +298,28 @@ public class wordMain implements UpdateListener, NewListener, PaperListener {
 
     }
 
-    // 테스트 후 결과 확인
-    public void resultTable(List<WordBook> randomList, List<String> ckList) { // paper에서... 값을 가져옵니다..
-        model = new DefaultTableModel(null, COLUMN_NAMES2);
-
-        for (int i = 0; i < answerList.size(); i++) {
-            if (answerList.get(i).replace(" ", "")
-                    .equals((randomList.get(i).getMeaning() + randomList.get(i).getPronunciation()))) {
-                System.out.println("정답입니다!");
-                ckList.add("O");
-            } else {
-                ckList.add("X");
-            }
-        }
-
-    }
+//    // 테스트 후 결과 확인
+//    public void resultTable(List<WordBook> randomList, List<String> ckList) { // paper에서... 값을 가져옵니다..
+//        model = new DefaultTableModel(null, COLUMN_NAMES2);
+//        
+//        for (int i = 0; i < answerList.size(); i++) {
+//            if (answerList.get(i).replace(" ", "")
+//                    .equals((randomList.get(i).getMeaning() + randomList.get(i).getPronunciation()))) {
+//                System.out.println("정답입니다!");
+//                ckList.add("O");
+//            } else {
+//                ckList.add("X");
+//            }
+//        }
+//
+//    }
 
     @Override
     public void paperNotify(List<String> answerList, List<WordBook> randomList, List<String> ckList) {
         this.answerList = answerList;
         this.randomList = randomList;
         this.ckList = ckList;
-
+        reopenButtons();
         model = new DefaultTableModel(null, COLUMN_NAMES2);
 
         for (int i = 0; i < randomList.size(); i++) {
@@ -304,6 +343,13 @@ public class wordMain implements UpdateListener, NewListener, PaperListener {
         
         table.setModel(model);
 
+    }
+
+    @Override
+    public void paperNotify() {
+        reopenButtons();
+        initializeTable();
+        
     }
 
 }

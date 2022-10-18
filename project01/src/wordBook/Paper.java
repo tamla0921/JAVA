@@ -14,15 +14,18 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.awt.event.ActionEvent;
 
 import static wordBook.WordBook.Entity.*;
 import static wordBook.WordBookSql.*;
 
-public class Paper extends JFrame{
+public class Paper extends JFrame {
     public interface PaperListener {
         void paperNotify(List<String> answerList, List<WordBook> randomList, List<String> ckList);
+        void paperNotify();
     }
+
     private PaperListener address;
     private PaperListener listener;
     private String from;
@@ -39,6 +42,8 @@ public class Paper extends JFrame{
     private List<String> answerList = new ArrayList<>();
     private List<String> ckList = new ArrayList<>();
 
+    private static Paper frame = null;
+    
     /**
      * Launch the application.
      */
@@ -46,9 +51,14 @@ public class Paper extends JFrame{
         EventQueue.invokeLater(new Runnable() {
             public void run() {
 
-                Paper frame = new Paper(from, to, l);
-                frame.setVisible(true);
-
+                frame = new Paper(from, to, l);
+                if (frame.randomList.size() > 0) {
+                    frame.setVisible(true);
+                } else {
+                    frame.listener.paperNotify();
+                    frame.dispose();
+                }
+                
             }
         });
     }
@@ -62,9 +72,10 @@ public class Paper extends JFrame{
         this.to = to;
         this.listener = l;
 
-        randomList = dao.get10words(from, to);
-        System.out.println(randomList);
+        
+        
         initialize();
+
     }
 
     private void initialize() {
@@ -91,7 +102,6 @@ public class Paper extends JFrame{
         textQuiz.setBounds(18, 5, 116, 157);
         panel_1.add(textQuiz);
         textQuiz.setColumns(10);
-        textQuiz.setText(randomList.get(0).getWord());
 
         textAnswer = new JTextField();
         textAnswer.setBounds(18, 181, 116, 21);
@@ -106,7 +116,19 @@ public class Paper extends JFrame{
         });
         btnNext.setBounds(30, 224, 97, 23);
         panel_1.add(btnNext);
+
+        randomList = dao.get10words(from, to);
+        
+        try {
+            textQuiz.setText(randomList.get(0).getWord());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "........................................");
+//            dispose();
+        }
+        
     }
+        
+    
 
     protected void gogogo() {
         if (quizNumber < randomList.size()) {
@@ -124,10 +146,9 @@ public class Paper extends JFrame{
             System.out.println(answerList);
             paperResult();
             dispose();
-            
+
             listener.paperNotify(answerList, randomList, ckList);
 
-            
         }
 
         if (quizNumber == randomList.size()) {
@@ -136,18 +157,18 @@ public class Paper extends JFrame{
 
     }
 
-
     private void paperResult() {
         for (int i = 0; i < answerList.size(); i++) {
             if (answerList.get(i).replace(" ", "")
                     .equals((randomList.get(i).getMeaning() + randomList.get(i).getPronunciation()))) {
                 System.out.println("정답입니다!");
                 ckList.add("O");
+//                dao.marked("O");
             } else {
                 ckList.add("X");
+//                dao.marked("X");
             }
         }
-        
 
     }
 
@@ -159,11 +180,8 @@ public class Paper extends JFrame{
         return quizNumber;
 
     }
-    
+
     public void getAddress(PaperListener address) {
         this.address = address;
     }
 }
-
-
-    // TODO: 추출한 랜덤단어리스트와, O,X값 리스트를 메인 창에서 출력하고 싶습니다.

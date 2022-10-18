@@ -17,6 +17,8 @@ import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.util.List;
 import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class WordBookTestFrame extends JFrame {
 
@@ -24,13 +26,13 @@ public class WordBookTestFrame extends JFrame {
     
     private JPanel contentPane;
     private JTextField textFromYear;
-    private JTextField textFromMonth;
-    private JTextField textFromDay;
     private JTextField textToYear;
-    private JTextField textToMonth;
-    private JTextField textToDay;
     
     private PaperListener l;
+    private JComboBox cbFromMonth;
+    private JComboBox cbFromDay;
+    private JComboBox cbToMonth;
+    private JComboBox cbToDay;
 
     /**
      * Launch the application.
@@ -80,30 +82,10 @@ public class WordBookTestFrame extends JFrame {
         panel_1.add(textFromYear);
         textFromYear.setColumns(10);
 
-        textFromMonth = new JTextField();
-        textFromMonth.setColumns(10);
-        textFromMonth.setBounds(165, 22, 86, 21);
-        panel_1.add(textFromMonth);
-
-        textFromDay = new JTextField();
-        textFromDay.setColumns(10);
-        textFromDay.setBounds(276, 22, 86, 21);
-        panel_1.add(textFromDay);
-
         textToYear = new JTextField();
         textToYear.setColumns(10);
         textToYear.setBounds(12, 136, 86, 21);
         panel_1.add(textToYear);
-
-        textToMonth = new JTextField();
-        textToMonth.setColumns(10);
-        textToMonth.setBounds(165, 136, 86, 21);
-        panel_1.add(textToMonth);
-
-        textToDay = new JTextField();
-        textToDay.setColumns(10);
-        textToDay.setBounds(276, 136, 86, 21);
-        panel_1.add(textToDay);
 
         JLabel lblNewLabel = new JLabel("년");
         lblNewLabel.setBounds(99, 28, 57, 15);
@@ -141,22 +123,44 @@ public class WordBookTestFrame extends JFrame {
         });
         btnStart.setBounds(315, 193, 97, 23);
         panel_1.add(btnStart);
+        
+        cbFromMonth = new JComboBox();
+        cbFromMonth.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
+        cbFromMonth.setBounds(182, 21, 58, 23);
+        panel_1.add(cbFromMonth);
+        
+        cbFromDay = new JComboBox();
+        cbFromDay.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
+        cbFromDay.setBounds(296, 21, 66, 23);
+        panel_1.add(cbFromDay);
+        
+        cbToMonth = new JComboBox();
+        cbToMonth.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
+        cbToMonth.setBounds(182, 135, 58, 23);
+        panel_1.add(cbToMonth);
+        
+        cbToDay = new JComboBox();
+        cbToDay.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
+        cbToDay.setBounds(296, 135, 59, 23);
+        panel_1.add(cbToDay);
     }
 
     protected void start() {
         String fromYear = textFromYear.getText();
-        String fromMonth = textFromMonth.getText();
-        String fromDay = textFromDay.getText();
+        String fromMonth = (String) cbFromMonth.getSelectedItem();
+        String fromDay = (String) cbFromDay.getSelectedItem();
         String toYear = textToYear.getText();
-        String toMonth = textToMonth.getText();
-        String toDay = textToDay.getText();
+        String toMonth = (String) cbToMonth.getSelectedItem();
+        String toDay = (String) cbToDay.getSelectedItem();
 
         if (fromYear.equals("") || fromMonth.equals("") || fromDay.equals("") || toYear.equals("") || toMonth.equals("")
                 || toDay.equals("")) {
             JOptionPane.showMessageDialog(this, "빈 칸은 입력할 수 없습니다.");
             return;
         }
-
+        
+        
+        
         String from = String.format(fromYear + "/" + fromMonth + "/" + fromDay);
         String to = String.format(toYear + "/" + toMonth + "/" + toDay);
 
@@ -166,7 +170,8 @@ public class WordBookTestFrame extends JFrame {
 
         System.out.println("dd: " + from);
         System.out.println("ee: " + to);
-
+        
+        
     }
 
 }

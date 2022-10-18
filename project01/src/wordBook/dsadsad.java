@@ -15,6 +15,20 @@ public class dsadsad {
 
         answerList.add(answer);
         System.out.println(answerList);
+        
+        
+        String fromYear = "2022"; 
+        String fromMonth = "09";
+        String fromDay = "03";
+        
+        String toYear = "2021";
+        String toMonth = "3";
+        
+        
+        int before = Integer.parseInt(fromYear+fromMonth+fromDay);
+        
+        System.out.println(before);
+        
     }
 }
 
