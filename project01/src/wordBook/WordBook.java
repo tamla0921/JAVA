@@ -14,7 +14,7 @@ public class WordBook {
         String COL_PRONUNCIATION = "PRONUNCIATION";
         String COL_GRADE = "GRADE";
         String COL_DAY = "DAY";
-        
+
     } // 인터페이스 닫음
 
     // 멤버
@@ -25,12 +25,13 @@ public class WordBook {
     private String pronunciation;
     private Integer grade;
     private Date day;
-//    private String answer;
-    
+
     // 생성자
-    public WordBook() {}
-    
-    public WordBook(Integer no, String word, String radical, String meaning, String pronunciation, Integer grade, Date day) {
+    public WordBook() {
+    }
+
+    public WordBook(Integer no, String word, String radical, String meaning, String pronunciation, Integer grade,
+            Date day) {
         this.no = no;
         this.word = word;
         this.radical = radical;
@@ -38,22 +39,17 @@ public class WordBook {
         this.pronunciation = pronunciation;
         this.grade = grade;
         this.day = day;
-        //this.answer = answer;
+
     }
 
-    // getter
-//    public String getAnswer() {
-//        return answer;
-//    }
-    
     public Date getDay() {
         return day;
     }
-    
+
     public Integer getNo() {
         return no;
     }
-    
+
     public String getWord() {
         return word;
     }
@@ -73,12 +69,13 @@ public class WordBook {
     public Integer getGrade() {
         return grade;
     }
-    
-    //toString
-    
+
+    // toString
+
     @Override
     public String toString() {
-        return String.format("Information(단어 = %s, 부수 = %s, 뜻 = %s, %s, 급수 = %d)", this.word, this.radical, this.meaning, this.pronunciation, this.grade);
+        return String.format("Information(단어 = %s, 부수 = %s, 뜻 = %s, %s, 급수 = %d)", this.word, this.radical,
+                this.meaning, this.pronunciation, this.grade);
     }
 
 } // 클래스 닫음

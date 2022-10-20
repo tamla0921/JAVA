@@ -33,6 +33,8 @@ public class WordBookDaoImpl implements WordBookDao {
 
     }
 
+    
+// (1) 전체 읽기
 // ------------------------------------------------------------------------------------------------------------------------------ //
     @Override
     public List<WordBook> read() {
@@ -80,6 +82,7 @@ public class WordBookDaoImpl implements WordBookDao {
         return list;
     }
 
+//(2) 자세히 보기
 // ---------------------------------------------------------------------------------------------------------------------------------------------- //        
     @Override
     public WordBook read(Integer no) {
@@ -125,6 +128,7 @@ public class WordBookDaoImpl implements WordBookDao {
         return wb;
     }
 
+// (3) 수정하기
 // ------------------------------------------------------------------------------------------------------------- //
     public Integer update(WordBook wrd) {
         int result = 0;
@@ -196,6 +200,7 @@ public class WordBookDaoImpl implements WordBookDao {
         return result;
     }
 
+// (4) 삭제하기 
 // -------------------------------------------------------------------------------------------------- //
     @Override
     public Integer delete(Integer no) {
@@ -220,7 +225,7 @@ public class WordBookDaoImpl implements WordBookDao {
 
         return result;
     }
-
+// (5) 검색하기
     @Override
     public List<WordBook> read(int type, String keyword) {
         List<WordBook> list = new ArrayList<>();
@@ -290,6 +295,7 @@ public class WordBookDaoImpl implements WordBookDao {
         return list;
     }
 
+// (6) 자세히 보기에 있는 다음 버튼
     @Override
     public WordBook next(Integer no) {
         WordBook wrd = null;
@@ -339,41 +345,6 @@ public class WordBookDaoImpl implements WordBookDao {
             }
         }
 
-//        try {
-//            DriverManager.registerDriver(new OracleDriver());
-//            conn = DriverManager.getConnection(URL, USER, PASSWORD);
-//
-//            stmt = conn.prepareStatement(SQL_NEXT_GROUP);
-//            stmt.setInt(1, no);
-//            rs = stmt.executeQuery();
-//
-//            if (rs.next()) {
-//                int n = rs.getInt(COL_NO);
-//                String w = rs.getString(COL_WORD);
-//                String r = rs.getString(COL_RADICAL);
-//                String m = rs.getString(COL_MEANING);
-//                String p = rs.getString(COL_PRONUNCIATION);
-//                int g = rs.getInt(COL_GRADE);
-//                Date d = rs.getDate(COL_DAY);
-//                
-//                wrd = new WordBook(n,w,r,m,p,g,d);
-//            }
-//
-//        } catch (SQLException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } finally {
-//            try {
-//                rs.close();
-//                stmt.close();
-//                conn.close();
-//            } catch (SQLException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
-//            
-//        }
-
         return wrd;
     }
 
@@ -422,6 +393,7 @@ public class WordBookDaoImpl implements WordBookDao {
         return wrd;
     }
 
+// (7) 배운 날짜 생성하기
 // -------------------------------------------------------------------------------------------------- //
     @Override
     public Integer birthday(Integer no) {
@@ -664,46 +636,5 @@ public class WordBookDaoImpl implements WordBookDao {
 
         return list;
     }
-
-//    @Override
-//    public Integer marked(String ox) {
-//        int result = 0;
-//        
-//        Connection conn = null;
-//        PreparedStatement stmt = null;
-//        
-//        try {
-//            DriverManager.registerDriver(new OracleDriver());
-//            conn = DriverManager.getConnection(URL,USER,PASSWORD);
-//            
-//            
-//        } catch (SQLException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } finally {
-//            stmt.close();
-//            conn.close();
-//        }
-//    
-//        return result;
-//    }
-
-//    public int get10wordsMarked(List<WordBook> List) {
-//        int result = 0;
-//        
-//        Connection conn = null;
-//        PreparedStatement stmt = null;
-//        
-//        try {
-//            DriverManager.registerDriver(new OracleDriver());
-//            conn = DriverManager.getConnection(URL, USER, PASSWORD);
-//            stmt = conn.prepareStatement(SQL_10WORDS_MARK);
-//        } catch (SQLException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//        
-//        return result;
-//    }
 
 } // DAOIMPL 닫음

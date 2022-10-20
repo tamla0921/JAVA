@@ -23,6 +23,7 @@ import static wordBook.WordBookSql.*;
 public class Paper extends JFrame {
     public interface PaperListener {
         void paperNotify(List<String> answerList, List<WordBook> randomList, List<String> ckList);
+
         void paperNotify();
     }
 
@@ -43,7 +44,7 @@ public class Paper extends JFrame {
     private List<String> ckList = new ArrayList<>();
 
     private static Paper frame = null;
-    
+
     /**
      * Launch the application.
      */
@@ -58,7 +59,7 @@ public class Paper extends JFrame {
                     frame.listener.paperNotify();
                     frame.dispose();
                 }
-                
+
             }
         });
     }
@@ -72,8 +73,6 @@ public class Paper extends JFrame {
         this.to = to;
         this.listener = l;
 
-        
-        
         initialize();
 
     }
@@ -118,17 +117,15 @@ public class Paper extends JFrame {
         panel_1.add(btnNext);
 
         randomList = dao.get10words(from, to);
-        
+
         try {
             textQuiz.setText(randomList.get(0).getWord());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "........................................");
 //            dispose();
         }
-        
+
     }
-        
-    
 
     protected void gogogo() {
         if (quizNumber < randomList.size()) {

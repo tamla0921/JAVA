@@ -5,11 +5,14 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+
 import java.awt.BorderLayout;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.EventObject;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
@@ -23,8 +26,24 @@ import wordBook.WordBookNewFrame.NewListener;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.Font;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.SwingConstants;
+import java.awt.event.ContainerAdapter;
+import java.awt.event.ContainerEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.VetoableChangeListener;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
-public class wordMain implements UpdateListener, NewListener, PaperListener {
+public class wordMain implements UpdateListener, NewListener, PaperListener, ActionListener {
     private static final String[] COLUMN_NAMES = { "no", "단어", "뜻", "급수", "배운 날짜" };
     private static final String[] COLUMN_NAMES2 = { "no", "한자", "뜻", "O/X" };
     private DefaultTableModel model;
@@ -36,9 +55,6 @@ public class wordMain implements UpdateListener, NewListener, PaperListener {
     private JTextField textSearch;
     private JComboBox sadari;
     private JButton btnNew;
-    private JButton btnDetail;
-    private JButton btnDelete;
-    private JButton btnSearch;
     private JButton btnTest;
 
     private List<WordBook> randomList;
@@ -46,6 +62,11 @@ public class wordMain implements UpdateListener, NewListener, PaperListener {
     private List<String> answerList;
     private JButton btnReset;
     private JPanel panel_1;
+
+    private JPopupMenu popupMenu;
+    private JMenuItem menuItemShow;
+    private JMenuItem menuItemRemove;
+    // private EventObject event;
 
     /**
      * Launch the application.
@@ -70,6 +91,7 @@ public class wordMain implements UpdateListener, NewListener, PaperListener {
         initialize();
         dao = WordBookDaoImpl.getInstance();
         initializeTable();
+
     }
 
 // 메서드  ------------------------------------------------------------------------------- //    
@@ -77,103 +99,136 @@ public class wordMain implements UpdateListener, NewListener, PaperListener {
      * Initialize the contents of the frame.
      */
     private void initialize() {
-
         frame = new JFrame();
-        frame.setBounds(100, 100, 870, 616);
+        frame.setBounds(600, 150, 307, 617);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
 
         JPanel panel = new JPanel();
-        panel.setBounds(0, 0, 835, 46);
+        panel.setBounds(0, 0, 291, 72);
         frame.getContentPane().add(panel);
+        panel.setLayout(null);
+        String[] comboBoxItems = { "단어", "음", "훈", "부수", "급수" };
+        DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>(comboBoxItems);
 
-        btnDetail = new JButton("자세히 보기");
-        btnDetail.setBounds(175, 5, 97, 23);
-        btnDetail.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showDetail();
+        sadari = new JComboBox<>();
+        sadari.addItemListener(new ItemListener() {
+
+            public void itemStateChanged(ItemEvent e) {
+                if (textSearch.getText().equals("")) {
+                    initializeTable();
+                }else {
+                searchWordByKeyword();
+            }
             }
         });
 
-        btnNew = new JButton("한자 추가");
-        btnNew.setBounds(85, 5, 85, 23);
+        sadari.setBounds(6, 41, 51, 21);
+        panel.add(sadari);
+
+        sadari.setModel(comboBoxModel);
+        sadari.setSelectedIndex(0);
+
+        textSearch = new JTextField();
+        textSearch.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (textSearch.getText().equals("")) {
+                    initializeTable();
+                } else {
+                searchWordByKeyword();
+                }
+            }
+        });
+//        textSearch.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent e) {
+//                searchWordByKeyword();
+//            }
+//        });
+        textSearch.setBounds(63, 41, 221, 21);
+        panel.add(textSearch);
+        textSearch.setColumns(10);
+
+        btnNew = new JButton("＋");
+        btnNew.addContainerListener(new ContainerAdapter() {
+
+        });
+        btnNew.setBounds(232, 9, 51, 22);
+        panel.add(btnNew);
+        btnNew.setFont(new Font("굴림", Font.BOLD, 12));
+
+        JLabel lblNewLabel = new JLabel("나만의 단어장");
+        lblNewLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+        lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel.setBounds(4, 9, 139, 22);
+        panel.add(lblNewLabel);
         btnNew.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 showNew();
             }
         });
-        panel.setLayout(null);
-        panel.add(btnNew);
-        panel.add(btnDetail);
 
-        btnDelete = new JButton("삭제하기");
-        btnDelete.setBounds(277, 5, 81, 23);
-        btnDelete.addActionListener(new ActionListener() {
+        JScrollPane scrollPane = new JScrollPane();
+
+        scrollPane.setBounds(0, 72, 291, 472);
+        frame.getContentPane().add(scrollPane);
+
+        popupMenu = new JPopupMenu();
+        menuItemShow = new JMenuItem("자세히 보기");
+        menuItemRemove = new JMenuItem("삭제하기");
+
+        menuItemShow.addActionListener(this);
+        menuItemRemove.addActionListener(this);
+
+        popupMenu.add(menuItemShow);
+        popupMenu.add(menuItemRemove);
+
+        table = new JTable();
+        table.setComponentPopupMenu(popupMenu);
+        table.addMouseListener(new PopUp(table));
+
+        table.addMouseListener(new MouseAdapter() {
             @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.getButton() == 1) {
+                }
+                if (e.getClickCount() == 2) {
+                    showDetail();
+                }
+                if (e.getButton() == 3) {
+                    int column = table.columnAtPoint(e.getPoint());
+                    int row = table.rowAtPoint(e.getPoint());
+                    table.changeSelection(row, column, false, false);
+
+                }
+            }
+
+        });
+
+        scrollPane.setViewportView(table);
+
+        panel_1 = new JPanel();
+        panel_1.setBounds(0, 544, 291, 33);
+        frame.getContentPane().add(panel_1);
+
+        btnTest = new JButton("TEST");
+        btnTest.setFont(new Font("맑은 고딕", Font.BOLD, 12));
+        panel_1.add(btnTest);
+
+        btnReset = new JButton("🔁");
+        panel_1.add(btnReset);
+        btnReset.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                delete();
+                initializeTable();
             }
         });
-        panel.add(btnDelete);
-        String[] comboBoxItems = { "단어", "음", "훈", "부수", "급수" };
-        DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>(comboBoxItems);
-
-        btnTest = new JButton("TEST!!");
-        btnTest.setBounds(364, 5, 73, 23);
         btnTest.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 clearTable();
 
             }
         });
-        panel.add(btnTest);
-
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBounds(0, 45, 393, 438);
-        frame.getContentPane().add(scrollPane);
-
-        table = new JTable();
-        scrollPane.setViewportView(table);
-        
-        panel_1 = new JPanel();
-        panel_1.setBounds(0, 484, 835, 93);
-        frame.getContentPane().add(panel_1);
-                
-                        sadari = new JComboBox<>();
-                        panel_1.add(sadari);
-                        sadari.addActionListener(new ActionListener() {
-                            public void actionPerformed(ActionEvent e) {
-                            
-
-                            }
-                        });
-                        sadari.setModel(comboBoxModel);
-                        sadari.setSelectedIndex(0);
-        
-                textSearch = new JTextField();
-                panel_1.add(textSearch);
-                textSearch.setColumns(10);
-                
-                        btnSearch = new JButton("검색");
-                        panel_1.add(btnSearch);
-                        
-                                btnReset = new JButton("초기화");
-                                panel_1.add(btnReset);
-                                btnReset.addActionListener(new ActionListener() {
-                                    public void actionPerformed(ActionEvent e) {
-                                        initializeTable();
-                                    }
-                                });
-                        btnSearch.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                
-                                searchWordByKeyword();
-                                
-                            }
-                        });
     }
 
     protected void clearTable() {
@@ -186,9 +241,7 @@ public class wordMain implements UpdateListener, NewListener, PaperListener {
 
     private void hidebuttons() {
         btnNew.setEnabled(false);
-        btnDelete.setEnabled(false);
-        btnDetail.setEnabled(false);
-        btnSearch.setEnabled(false);
+
         btnTest.setEnabled(false);
         sadari.setEnabled(false);
         textSearch.setEnabled(false);
@@ -198,9 +251,7 @@ public class wordMain implements UpdateListener, NewListener, PaperListener {
 
     private void reopenButtons() {
         btnNew.setEnabled(true);
-        btnDelete.setEnabled(true);
-        btnDetail.setEnabled(true);
-        btnSearch.setEnabled(true);
+
         btnTest.setEnabled(true);
         sadari.setEnabled(true);
         textSearch.setEnabled(true);
@@ -209,41 +260,56 @@ public class wordMain implements UpdateListener, NewListener, PaperListener {
 
     // 테이블 새로고침
     private void initializeTable() {
-        model = new DefaultTableModel(null, COLUMN_NAMES);
-        table.setModel(model);
 
         List<WordBook> list = dao.read();
 
-        for (WordBook w : list) {
-            Object[] rowData = { w.getNo(), w.getWord(), w.getMeaning() + " " + w.getPronunciation(), w.getGrade(),
-                    w.getDay() };
-            model.addRow(rowData);
-        }
+        showme(list);
     }
 // 데이터 변경 메서드 모음
 
-    // TODO 단어 검색
     protected void searchWordByKeyword() {
+//        String keyword = textSearch.getText();
+//        if (keyword.equals("")) {
+//            JOptionPane.showMessageDialog(frame, "검색어 입력...");
+//            textSearch.requestFocus();
+//
+//            return;
+//        }
+
+        int type = getIndexForSearch();
+
         String keyword = textSearch.getText();
-        if (keyword.equals("")) {
-            JOptionPane.showMessageDialog(frame, "검색어 입력...");
-            textSearch.requestFocus();
-
-            return;
-        }
-
-        int type = sadari.getSelectedIndex();
 
         System.out.println("type = " + type + ", keyword = " + keyword);
 
         List<WordBook> list = dao.read(type, keyword);
 
+        // TODO
+        // ---여기부터 함수 ---//
+
+        showme(list);
+
+    }
+
+    private int getIndexForSearch() {
+
+        int type = sadari.getSelectedIndex();
+        return type;
+    }
+
+    private void showme(List<WordBook> list) {
         model = new DefaultTableModel(null, COLUMN_NAMES);
         table.setModel(model);
+        table.getColumn("no").setWidth(0);
+        table.getColumn("no").setMinWidth(0);
+        table.getColumn("no").setMaxWidth(0);
+        table.getColumn("단어").setPreferredWidth(0);
+        table.getColumn("급수").setPreferredWidth(0);
 
         for (WordBook w : list) {
-            Object[] row = { w.getNo(), w.getWord(), w.getMeaning() + " " + w.getPronunciation(), w.getGrade() };
-            model.addRow(row);
+            Object[] rowData = { w.getNo(), w.getWord(), w.getMeaning() + " " + w.getPronunciation(), w.getGrade(),
+                    w.getDay() };
+            model.addRow(rowData);
         }
 
     }
@@ -347,4 +413,15 @@ public class wordMain implements UpdateListener, NewListener, PaperListener {
         initializeTable();
 
     }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JMenuItem menu = (JMenuItem) e.getSource();
+        if (menu == menuItemShow) {
+            showDetail();
+        } else if (menu == menuItemRemove) {
+            delete();
+        }
+    }
+
 }
