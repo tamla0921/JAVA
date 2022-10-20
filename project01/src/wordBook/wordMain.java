@@ -117,9 +117,9 @@ public class wordMain implements UpdateListener, NewListener, PaperListener, Act
             public void itemStateChanged(ItemEvent e) {
                 if (textSearch.getText().equals("")) {
                     initializeTable();
-                }else {
-                searchWordByKeyword();
-            }
+                } else {
+                    searchWordByKeyword();
+                }
             }
         });
 
@@ -136,7 +136,7 @@ public class wordMain implements UpdateListener, NewListener, PaperListener, Act
                 if (textSearch.getText().equals("")) {
                     initializeTable();
                 } else {
-                searchWordByKeyword();
+                    searchWordByKeyword();
                 }
             }
         });
@@ -235,7 +235,7 @@ public class wordMain implements UpdateListener, NewListener, PaperListener, Act
         model = new DefaultTableModel();
         table.setModel(model);
         hidebuttons();
-        WordBookTestFrame.testFrame(this);
+        WordBookTestFrame.testFrame(frame, wordMain.this);
 
     }
 
@@ -404,7 +404,9 @@ public class wordMain implements UpdateListener, NewListener, PaperListener, Act
         }
 
         table.setModel(model);
-
+        table.getColumn("no").setWidth(0);
+        table.getColumn("no").setMinWidth(0);
+        table.getColumn("no").setMaxWidth(0);
     }
 
     @Override

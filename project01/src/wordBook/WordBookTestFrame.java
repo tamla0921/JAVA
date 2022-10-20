@@ -10,6 +10,8 @@ import wordBook.Paper.PaperListener;
 
 import javax.swing.JTextField;
 import java.awt.BorderLayout;
+import java.awt.Component;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
@@ -18,14 +20,19 @@ import java.sql.Date;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
+import java.awt.Font;
+import javax.swing.border.MatteBorder;
+import java.awt.Color;
 
 public class WordBookTestFrame extends JFrame {
 
     private WordBookDaoImpl dao;
-    
+
     private JPanel contentPane;
-    
+
+    private Component parent;
     private PaperListener l;
     private JComboBox cbFromMonth;
     private JComboBox cbFromDay;
@@ -37,11 +44,11 @@ public class WordBookTestFrame extends JFrame {
     /**
      * Launch the application.
      */
-    public static void testFrame(PaperListener l) {
+    public static void testFrame(Component parent, PaperListener l) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
 
-                WordBookTestFrame frame = new WordBookTestFrame(l);
+                WordBookTestFrame frame = new WordBookTestFrame(parent, l);
                 frame.setVisible(true);
 
             }
@@ -51,17 +58,22 @@ public class WordBookTestFrame extends JFrame {
     /**
      * Create the frame.
      */
-    public WordBookTestFrame(PaperListener l) {
+    public WordBookTestFrame(Component parent, PaperListener l) {
         dao = WordBookDaoImpl.getInstance();
+        this.parent = parent;
         this.l = l;
-        
+
         initialize();
 
     }
 
     private void initialize() {
+
+        int x = parent.getX();
+        int y = parent.getY();
+
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setBounds(100, 100, 450, 300);
+        setBounds(x + 300, y, 346, 204);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -79,75 +91,94 @@ public class WordBookTestFrame extends JFrame {
         panel_1.setLayout(null);
 
         JLabel lblNewLabel = new JLabel("년");
-        lblNewLabel.setBounds(99, 28, 57, 15);
+        lblNewLabel.setBounds(99, 14, 12, 15);
         panel_1.add(lblNewLabel);
 
         JLabel lblNewLabel_1 = new JLabel("년");
-        lblNewLabel_1.setBounds(99, 139, 57, 15);
+        lblNewLabel_1.setBounds(99, 67, 12, 15);
         panel_1.add(lblNewLabel_1);
 
         JLabel lblNewLabel_1_1 = new JLabel("월");
-        lblNewLabel_1_1.setBounds(252, 28, 57, 15);
+        lblNewLabel_1_1.setBounds(191, 14, 12, 15);
         panel_1.add(lblNewLabel_1_1);
 
         JLabel lblNewLabel_1_1_1 = new JLabel("월");
-        lblNewLabel_1_1_1.setBounds(252, 142, 57, 15);
+        lblNewLabel_1_1_1.setBounds(191, 67, 12, 15);
         panel_1.add(lblNewLabel_1_1_1);
 
         JLabel lblNewLabel_1_1_1_1 = new JLabel("일");
-        lblNewLabel_1_1_1_1.setBounds(367, 28, 57, 15);
+        lblNewLabel_1_1_1_1.setBounds(293, 14, 12, 15);
         panel_1.add(lblNewLabel_1_1_1_1);
 
         JLabel lblNewLabel_1_1_1_1_1 = new JLabel("일");
-        lblNewLabel_1_1_1_1_1.setBounds(367, 142, 57, 15);
+        lblNewLabel_1_1_1_1_1.setBounds(293, 67, 12, 15);
         panel_1.add(lblNewLabel_1_1_1_1_1);
 
         JLabel lblNewLabel_2 = new JLabel("~");
-        lblNewLabel_2.setBounds(182, 79, 57, 15);
+        lblNewLabel_2.setBounds(148, 43, 18, 15);
         panel_1.add(lblNewLabel_2);
 
         JButton btnStart = new JButton("시작!");
+        btnStart.setBackground(Color.LIGHT_GRAY);
+        btnStart.setFont(new Font("굴림", Font.BOLD, 12));
         btnStart.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 start();
             }
         });
-        btnStart.setBounds(315, 193, 97, 23);
+        btnStart.setBounds(230, 97, 75, 23);
         panel_1.add(btnStart);
-        
+
         cbFromMonth = new JComboBox();
-        cbFromMonth.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
-        cbFromMonth.setBounds(182, 21, 58, 23);
+        cbFromMonth.setModel(new DefaultComboBoxModel(
+                new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        cbFromMonth.setBounds(121, 10, 58, 23);
         panel_1.add(cbFromMonth);
-        
+
         cbFromDay = new JComboBox();
-        cbFromDay.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
-        cbFromDay.setBounds(296, 21, 66, 23);
+        cbFromDay.setModel(new DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09",
+                "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26",
+                "27", "28", "29", "30", "31" }));
+        cbFromDay.setBounds(215, 10, 66, 23);
         panel_1.add(cbFromDay);
-        
+
         cbToMonth = new JComboBox();
-        cbToMonth.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
-        cbToMonth.setBounds(182, 135, 58, 23);
+        cbToMonth.setModel(new DefaultComboBoxModel(
+                new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        cbToMonth.setBounds(121, 63, 58, 23);
         panel_1.add(cbToMonth);
-        
+
         cbToDay = new JComboBox();
-        cbToDay.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
-        cbToDay.setBounds(296, 135, 59, 23);
+        cbToDay.setModel(new DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09",
+                "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26",
+                "27", "28", "29", "30", "31" }));
+        cbToDay.setBounds(215, 63, 66, 23);
         panel_1.add(cbToDay);
-        
-        
-        //String[] year = {"2222", "3333"};
+
+        // String[] year = {"2222", "3333"};
         String[] year = dao.getYear();
-        
+
         cbFromYear = new JComboBox();
         cbFromYear.setModel(new DefaultComboBoxModel(year));
-        cbFromYear.setBounds(12, 24, 75, 23);
+        cbFromYear.setBounds(12, 10, 75, 23);
         panel_1.add(cbFromYear);
-        
+
         cbToYear = new JComboBox();
         cbToYear.setModel(new DefaultComboBoxModel(year));
-        cbToYear.setBounds(12, 135, 75, 23);
+        cbToYear.setBounds(12, 63, 75, 23);
         panel_1.add(cbToYear);
+
+        JButton btnCancel = new JButton("←");
+        btnCancel.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                l.paperNotify();
+            }
+        });
+        btnCancel.setBackground(new Color(192, 192, 192));
+        btnCancel.setFont(new Font("굴림", Font.BOLD, 12));
+        btnCancel.setBounds(12, 97, 51, 23);
+        panel_1.add(btnCancel);
     }
 
     protected void start() {
@@ -158,25 +189,35 @@ public class WordBookTestFrame extends JFrame {
         String toMonth = (String) cbToMonth.getSelectedItem();
         String toDay = (String) cbToDay.getSelectedItem();
 
-        if (fromYear.equals("") || fromMonth.equals("") || fromDay.equals("") || toYear.equals("") || toMonth.equals("")
-                || toDay.equals("")) {
-            JOptionPane.showMessageDialog(this, "빈 칸은 입력할 수 없습니다.");
+//        if (fromYear.equals("") || fromMonth.equals("") || fromDay.equals("") || toYear.equals("") || toMonth.equals("")
+//                || toDay.equals("")) {
+//            JOptionPane.showMessageDialog(this, "빈 칸은 입력할 수 없습니다.");
+//            return;
+//        }
+
+        if (Integer.parseInt((String) cbToYear.getSelectedItem()) < Integer
+                .parseInt((String) cbFromYear.getSelectedItem())) {
+            JOptionPane.showMessageDialog(this, "시작하는 날짜가 끝나는 날짜보다 클 수 없습니다.");
+            return;
+        } else if (Integer.parseInt((String) cbToMonth.getSelectedItem()) < Integer
+                .parseInt((String) cbFromMonth.getSelectedItem())) {
+            JOptionPane.showMessageDialog(this, "시작하는 월이 끝나는 월보다 클 수 없습니다.");
+            return;
+        } else if (Integer.parseInt((String) cbToDay.getSelectedItem()) < Integer
+                .parseInt((String) cbFromDay.getSelectedItem())) {
+            JOptionPane.showMessageDialog(this, "시작하는 날이 끝나는 날보다 클수 없습니다.");
             return;
         }
-        
-        
-        
+
         String from = String.format(fromYear + "/" + fromMonth + "/" + fromDay);
         String to = String.format(toYear + "/" + toMonth + "/" + toDay);
 
-        Paper.paper(from, to, l);
-        
+        Paper.paper(parent, from, to, l);
+
         dispose();
 
         System.out.println("dd: " + from);
         System.out.println("ee: " + to);
-        
-        
-    }
 
+    }
 }

@@ -19,6 +19,10 @@ import java.awt.event.ActionEvent;
 
 import static wordBook.WordBook.Entity.*;
 import static wordBook.WordBookSql.*;
+import java.awt.Font;
+import javax.swing.SwingConstants;
+import java.awt.Color;
+import java.awt.Component;
 
 public class Paper extends JFrame {
     public interface PaperListener {
@@ -26,7 +30,8 @@ public class Paper extends JFrame {
 
         void paperNotify();
     }
-
+    
+    private Component parent;
     private PaperListener address;
     private PaperListener listener;
     private String from;
@@ -48,11 +53,11 @@ public class Paper extends JFrame {
     /**
      * Launch the application.
      */
-    public static void paper(String from, String to, PaperListener l) {
+    public static void paper(Component parent, String from, String to, PaperListener l) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
 
-                frame = new Paper(from, to, l);
+                frame = new Paper(parent, from, to, l);
                 if (frame.randomList.size() > 0) {
                     frame.setVisible(true);
                 } else {
@@ -67,19 +72,25 @@ public class Paper extends JFrame {
     /**
      * Create the frame.
      */
-    public Paper(String from, String to, PaperListener l) {
+    public Paper(Component parent, String from, String to, PaperListener l) {
         dao = WordBookDaoImpl.getInstance();
+        this.parent = parent;
         this.from = from;
         this.to = to;
         this.listener = l;
 
         initialize();
+        initializeTable();
 
     }
 
     private void initialize() {
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 178, 331);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        
+        int x = parent.getX();
+        int y = parent.getY();
+        
+        setBounds(x + 300, y, 178, 331);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -97,12 +108,21 @@ public class Paper extends JFrame {
         panel_1.setLayout(null);
 
         textQuiz = new JTextField();
+        textQuiz.setBorder(null);
+        textQuiz.setBackground(Color.WHITE);
+        textQuiz.setHorizontalAlignment(SwingConstants.CENTER);
+        textQuiz.setFont(new Font("굴림", Font.BOLD, 80));
         textQuiz.setEditable(false);
         textQuiz.setBounds(18, 5, 116, 157);
         panel_1.add(textQuiz);
         textQuiz.setColumns(10);
 
         textAnswer = new JTextField();
+        textAnswer.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                gogogo();
+            }
+        });
         textAnswer.setBounds(18, 181, 116, 21);
         panel_1.add(textAnswer);
         textAnswer.setColumns(10);
@@ -115,15 +135,18 @@ public class Paper extends JFrame {
         });
         btnNext.setBounds(30, 224, 97, 23);
         panel_1.add(btnNext);
+    }
 
+        private void initializeTable() {
         randomList = dao.get10words(from, to);
 
         try {
             textQuiz.setText(randomList.get(0).getWord());
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "........................................");
-//            dispose();
+            JOptionPane.showMessageDialog(parent, "입력한 날짜에는 공부한 단어가 없습니다.");
+
         }
+        
 
     }
 
