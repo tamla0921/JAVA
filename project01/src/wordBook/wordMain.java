@@ -66,6 +66,7 @@ public class wordMain implements UpdateListener, NewListener, PaperListener, Act
     private JPopupMenu popupMenu;
     private JMenuItem menuItemShow;
     private JMenuItem menuItemRemove;
+
     // private EventObject event;
 
     /**
