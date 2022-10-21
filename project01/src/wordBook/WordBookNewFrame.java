@@ -129,9 +129,9 @@ public class WordBookNewFrame extends JFrame {
         lblRadical.setFont(new Font("굴림", Font.BOLD, 12));
         lblRadical.setBounds(12, 162, 57, 15);
         contentPane.add(lblRadical);
-        
+
         cbGrade = new JComboBox();
-        cbGrade.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5", "6", "7", "8"}));
+        cbGrade.setModel(new DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8" }));
         cbGrade.setBounds(93, 158, 116, 23);
         contentPane.add(cbGrade);
     }
@@ -143,7 +143,7 @@ public class WordBookNewFrame extends JFrame {
         String m = textMeaning.getText();
         String p = textPronunciation.getText();
         Integer g = Integer.parseInt((String) cbGrade.getSelectedItem());
-            
+
         if (w.equals("") || r.equals("") || m.equals("") || p.equals("")) {
             JOptionPane.showMessageDialog(this, "빈 칸은 입력할 수 없습니다.");
             return;

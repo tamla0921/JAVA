@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
@@ -194,20 +196,17 @@ public class WordBookTestFrame extends JFrame {
 //            JOptionPane.showMessageDialog(this, "빈 칸은 입력할 수 없습니다.");
 //            return;
 //        }
-
-        if (Integer.parseInt((String) cbToYear.getSelectedItem()) < Integer
-                .parseInt((String) cbFromYear.getSelectedItem())) {
-            JOptionPane.showMessageDialog(this, "시작하는 날짜가 끝나는 날짜보다 클 수 없습니다.");
-            return;
-        } else if (Integer.parseInt((String) cbToMonth.getSelectedItem()) < Integer
-                .parseInt((String) cbFromMonth.getSelectedItem())) {
-            JOptionPane.showMessageDialog(this, "시작하는 월이 끝나는 월보다 클 수 없습니다.");
-            return;
-        } else if (Integer.parseInt((String) cbToDay.getSelectedItem()) < Integer
-                .parseInt((String) cbFromDay.getSelectedItem())) {
-            JOptionPane.showMessageDialog(this, "시작하는 날이 끝나는 날보다 클수 없습니다.");
+        
+        
+        LocalDate fromDate = LocalDate.of(Integer.parseInt(fromYear),Integer.parseInt(fromMonth),Integer.parseInt(fromDay));
+        LocalDate toDate = LocalDate.of(Integer.parseInt(toYear),Integer.parseInt(toMonth),Integer.parseInt(toDay));
+        
+        if (fromDate.isAfter(toDate)) {
+            JOptionPane.showMessageDialog(this, "시작하는 날짜가 끝나는 날짜보다 늦을 수 없습니다.");
             return;
         }
+        
+        System.out.println(fromDate);
 
         String from = String.format(fromYear + "/" + fromMonth + "/" + fromDay);
         String to = String.format(toYear + "/" + toMonth + "/" + toDay);

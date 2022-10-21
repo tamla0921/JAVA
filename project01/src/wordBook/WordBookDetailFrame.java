@@ -194,7 +194,7 @@ public class WordBookDetailFrame extends JFrame {
         JLabel lblNewLabel = new JLabel("급");
         lblNewLabel.setBounds(96, 10, 30, 21);
         contentPane.add(lblNewLabel);
-        
+
         btnReset = new JButton("🔁");
         btnReset.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

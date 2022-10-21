@@ -30,7 +30,7 @@ public class Paper extends JFrame {
 
         void paperNotify();
     }
-    
+
     private Component parent;
     private PaperListener address;
     private PaperListener listener;
@@ -86,10 +86,10 @@ public class Paper extends JFrame {
 
     private void initialize() {
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        
+
         int x = parent.getX();
         int y = parent.getY();
-        
+
         setBounds(x + 300, y, 178, 331);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -137,7 +137,7 @@ public class Paper extends JFrame {
         panel_1.add(btnNext);
     }
 
-        private void initializeTable() {
+    private void initializeTable() {
         randomList = dao.get10words(from, to);
 
         try {
@@ -146,7 +146,6 @@ public class Paper extends JFrame {
             JOptionPane.showMessageDialog(parent, "입력한 날짜에는 공부한 단어가 없습니다.");
 
         }
-        
 
     }
 

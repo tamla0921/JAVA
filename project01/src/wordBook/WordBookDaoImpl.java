@@ -33,7 +33,6 @@ public class WordBookDaoImpl implements WordBookDao {
 
     }
 
-    
 // (1) 전체 읽기
 // ------------------------------------------------------------------------------------------------------------------------------ //
     @Override
@@ -221,10 +220,19 @@ public class WordBookDaoImpl implements WordBookDao {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } finally {
+            try {
+                stmt.close();
+                conn.close();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
 
         return result;
     }
+
 // (5) 검색하기
     @Override
     public List<WordBook> read(int type, String keyword) {
@@ -459,9 +467,9 @@ public class WordBookDaoImpl implements WordBookDao {
             e.printStackTrace();
         } finally {
             try {
-                conn.close();
                 rs.close();
                 stmt.close();
+                conn.close();
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

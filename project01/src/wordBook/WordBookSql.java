@@ -32,11 +32,6 @@ public interface WordBookSql {
 
     String SQL_NEXT_NO = String.format("select %s from %s where %s > ? and rownum <= 1", COL_NO, TBL_WORDBOOK, COL_NO);
 
-//    String SQL_NEXT = String.format("select * from %s where ? in (select %s from %s)", TBL_WORDBOOK, COL_NO);
-
-//            String.format("select * from (select rownum as num, %s, %s, %s, %s, %s, %s, %s from %s) t where t.num = ? ", 
-//            COL_NO, COL_WORD, COL_RADICAL, COL_MEANING, COL_PRONUNCIATION, COL_GRADE, COL_DAY, TBL_WORDBOOK);
-
     String SQL_PREVIOUS = String.format(
             "select * from (select rownum as num, %s, %s, %s, %s, %s, %s, %s from %s) t where t.num = ?", COL_NO,
             COL_WORD, COL_RADICAL, COL_MEANING, COL_PRONUNCIATION, COL_GRADE, COL_DAY, TBL_WORDBOOK);
@@ -50,6 +45,7 @@ public interface WordBookSql {
             "select * from (select * from %s where to_char(%s, 'YYYY/MM/DD') >= ? and to_char(%s, 'YYYY/MM/DD') <= ? order by dbms_random.value ) where rownum <= 10",
             TBL_WORDBOOK, COL_DAY, COL_DAY);
 
-    String SQL_GET_YEAR = String.format("select to_char(%s, 'YYYY') as %s from %s group by to_char(%s, 'YYYY') order by %s", COL_DAY, COL_DAY,
+    String SQL_GET_YEAR = String.format(
+            "select to_char(%s, 'YYYY') as %s from %s group by to_char(%s, 'YYYY') order by %s", COL_DAY, COL_DAY,
             TBL_WORDBOOK, COL_DAY, COL_DAY);
 }

@@ -4,10 +4,11 @@ public class ConditionMain02 {
 
     public static void main(String[] args) {
         // 중첩 조건문
-        
-        double x = -3.14; //  소수의 기본 데이터는 Double,  float x = 3.14; 작성 시, ERROR - Type mismatch: cannot convert from double to float
-                         /* float x = 3.14F 로 한다면 가능!*/
-        
+
+        double x = -3.14; // 소수의 기본 데이터는 Double, float x = 3.14; 작성 시, ERROR - Type mismatch: cannot
+                          // convert from double to float
+        /* float x = 3.14F 로 한다면 가능! */
+
         // if - else if - else 문장
         if (x > 0) {
             System.out.println("양수");
@@ -27,7 +28,7 @@ public class ConditionMain02 {
                 System.out.println("Zero");
             }
         }
-        
+
     }
 
 }
